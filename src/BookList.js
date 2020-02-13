@@ -1,21 +1,53 @@
 import React from 'react';
 import './BookList.css';
-import Book from './Book';
 
 class BookList extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      error: null,
+      isLoaded: false,
+      items: []
+    };
+  }
+
+  componentDidMount() {
+    fetch("/books")
+    .then(res => res.json())
+    .then(
+      (result) => {
+        this.setState({
+          isLoaded: true,
+          items: result
+        });
+      },
+      (error) => {
+        this.setState({
+          isLoaded: true,
+          error
+        });
+      }
+    )
+  }
+
   render() {
-    return (
-      <div>
-        <div>
-          Add
-        </div>
-        <div>
-          <Book title="Harry" />
-          <Book title="Wiedźmin" />
-          <Book title="Gra o tron" />
-        </div>
-      </div>
-    );
+    const { error, isLoaded, items } = this.state;
+    if (error) {
+      return <div>Błąd: {error.message}</div>;
+    } else if (!isLoaded) {
+      return <div>Ładowanie...</div>;
+    } else {
+      return (
+        <ul>
+          { items.map(item => (
+            <li key={item.id}>
+              "{item.title}" {item.author}
+            </li>
+          )) }
+        </ul>
+      );
+    }
   }
 }
 

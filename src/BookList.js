@@ -1,5 +1,6 @@
 import React from 'react';
 import './BookList.css';
+import Book from './Book';
 
 class BookList extends React.Component {
   constructor(props) {
@@ -21,9 +22,7 @@ class BookList extends React.Component {
       return (
         <ul>
           { books.map(book => (
-            <li key={book.id}>
-              "{book.title}" {book.author}
-            </li>
+            <Book book={ book } />
           )) }
         </ul>
       )

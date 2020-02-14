@@ -5,48 +5,32 @@ class BookList extends React.Component {
   constructor(props) {
     super(props);
     
-    this.state = {
-      error: null,
-      isLoaded: false,
-      items: []
-    };
+    this.state = {};
   }
 
   componentDidMount() {
     fetch("/books")
     .then(res => res.json())
-    .then(
-      (result) => {
-        this.setState({
-          isLoaded: true,
-          items: result
-        });
-      },
-      (error) => {
-        this.setState({
-          isLoaded: true,
-          error
-        });
-      }
-    )
+    .then(json => this.setState({ books: json }))
   }
 
   render() {
-    const { error, isLoaded, items } = this.state;
-    if (error) {
-      return <div>Błąd: {error.message}</div>;
-    } else if (!isLoaded) {
-      return <div>Ładowanie...</div>;
-    } else {
+    const { books } = this.state;
+    
+    if(books) {
       return (
         <ul>
-          { items.map(item => (
-            <li key={item.id}>
-              "{item.title}" {item.author}
+          { books.map(book => (
+            <li key={book.id}>
+              "{book.title}" {book.author}
             </li>
           )) }
         </ul>
-      );
+      )
+    } else {
+      return (
+        <div>Ładowanie...</div>
+      )
     }
   }
 }

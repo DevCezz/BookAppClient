@@ -7,9 +7,14 @@ class BookList extends React.Component {
     super(props);
     
     this.state = {};
+    this.getAllBooks = this.getAllBooks.bind(this);
   }
 
   componentDidMount() {
+    this.getAllBooks();
+  }
+
+  getAllBooks() {
     fetch("/books")
     .then(res => res.json())
     .then(json => this.setState({ books: json }))
@@ -20,11 +25,13 @@ class BookList extends React.Component {
     
     if(books) {
       return (
-        <ul>
-          { books.map(book => (
-            <Book book={ book } />
-          )) }
-        </ul>
+        <div className="ui container">
+          <div className="ui cards centered">
+            { books.map(book => (
+              <Book book={ book } key={ book.id } />
+            )) }
+          </div>
+        </div>
       )
     } else {
       return (
